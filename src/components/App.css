@@ -1,0 +1,13 @@
+@keyframes flip-vertical {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+.flip-vertical {
+  animation: flip-vertical 1s;
+  /* animation: flip-horizontal 1.2s linear infinite; */
+  backface-visibility: hidden;
+}
