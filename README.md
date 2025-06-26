@@ -44,3 +44,6 @@ npm run dev
 
 * Twitter: [@Leonissx](https://twitter.com/Leonissx)
 * Github: [@Hazyshades](https://github.com/Hazyshades)
+
+## Roadmap
+![Editor _ Mermaid Chart-2025-06-26-193358](https://github.com/user-attachments/assets/0c54339e-74cc-44d8-a9e3-94787d39d242)
