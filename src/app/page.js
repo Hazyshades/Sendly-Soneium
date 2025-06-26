@@ -420,7 +420,6 @@ function Page() {
           </div>
         </div>
 
-        {/* Правая часть: Connect wallet и адрес */}
         <div className="flex items-center gap-2">
           {!isConnected && (
             <button onClick={openWalletModal}
@@ -439,7 +438,6 @@ function Page() {
         </div>
       </header>
 
-      {/* ВЫПАДАЮЩИЙ БЛОК С ИНФО-СЕКЦИЯМИ */}
       {infoSection === 'how' && (
         <section className="py-16 bg-white border-b-2 border-indigo-100 animate-fade-in">
           <div className="w-full px-2 sm:px-8 lg:px-24 xl:px-40 2xl:px-64 mx-auto">
