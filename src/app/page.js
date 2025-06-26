@@ -96,6 +96,7 @@ function Page() {
   const { address, isConnected } = useAccount();
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [walletModalKey, setWalletModalKey] = useState(0);
+  const [infoSection, setInfoSection] = useState(null);
 
   const handleServiceClick = (serviceName) => {
     if (selectedService === serviceName) {
@@ -344,6 +345,10 @@ function Page() {
     }
   }, [notification, selectedService]);
 
+  const handleInfoClick = (section) => {
+    setInfoSection(prev => prev === section ? null : section);
+  };
+
   return (
     
     <div className="min-h-screen w-full bg-radial-gradient font-sans">
@@ -374,25 +379,36 @@ function Page() {
         onClose={() => setWalletModalOpen(false)}
       />
 
-<header className="flex items-center justify-between bg-white/80 backdrop-blur-sm shadow-lg px-4 py-4 mb-8 rounded-b-3xl relative">
-      <Image
-        src={giftBoxLogo}
-        alt="giftBoxLogo"
-        width={210}
-        height={210}
-        className={`block ${spinning ? 'flip-vertical' : ''}`}
-        style={{ maxWidth: 210, maxHeight: 210 }}
-      />
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-          <Image
-            src={sendlyLogo}
-            alt="Sendly Logo"
-            width={400}
-            height={400}
-            className="block rounded-lg border-none"
-            style={{ maxWidth: 1200, maxHeight: 1200 }}
-          />
+      <header className="flex items-center justify-between bg-white/80 backdrop-blur-sm shadow-lg px-4 py-4 mb-8 rounded-b-3xl relative">
 
+        <div className="flex items-center">
+          <Image
+            src={giftBoxLogo}
+            alt="giftBoxLogo"
+            width={170}
+            height={170}
+            className={`block ${spinning ? 'flip-vertical' : ''}`}
+            style={{ maxWidth: 170, maxHeight: 170 }}
+          />
+        </div>
+
+
+        <div className="flex flex-col items-center flex-1">
+          <div className="flex justify-center gap-4 mb-2">
+            <button onClick={() => handleInfoClick('how')} className={`px-4 py-2 rounded-lg font-semibold text-base transition ${infoSection==='how' ? 'bg-indigo-500 text-white' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}>How Sendly Works</button>
+            <button onClick={() => handleInfoClick('features')} className={`px-4 py-2 rounded-lg font-semibold text-base transition ${infoSection==='features' ? 'bg-indigo-500 text-white' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}>Features</button>
+            <button onClick={() => handleInfoClick('merchants')} className={`px-4 py-2 rounded-lg font-semibold text-base transition ${infoSection==='merchants' ? 'bg-indigo-500 text-white' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}>For Merchants</button>
+            <button onClick={() => handleInfoClick('faq')} className={`px-4 py-2 rounded-lg font-semibold text-base transition ${infoSection==='faq' ? 'bg-indigo-500 text-white' : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'}`}>FAQ</button>
+          </div>
+          <div className="flex flex-col items-center relative">
+            <Image
+              src={sendlyLogo}
+              alt="Sendly Logo"
+              width={400}
+              height={400}
+              className="block rounded-lg border-none"
+              style={{ maxWidth: 1200, maxHeight: 1200 }}
+            />
             <Image
               src={soneiumLogo}
               alt="Soneium Logo"
@@ -400,27 +416,189 @@ function Page() {
               height={200}
               className="block rounded-lg border-none"
               style={{ maxWidth: 200, maxHeight: 200 }}
-              />
-            
+            />
+          </div>
         </div>
-        <div style={{ width: 80, height: 80 }} />
-        {!isConnected && (
-          <div className="mb-4 flex justify-center">
+
+        {/* Правая часть: Connect wallet и адрес */}
+        <div className="flex items-center gap-2">
+          {!isConnected && (
             <button onClick={openWalletModal}
               className="px-6 py-3 bg-indigo-500 text-white rounded-xl font-bold text-lg shadow hover:bg-indigo-600 transition"
             >
               Connect wallet
             </button>
-          </div>
-        )}
-        {isConnected && address && (
-          <div className="flex items-center gap-2 mt-2">
-            <div className="text-sm font-medium text-indigo-700">
-              {`${address.slice(0, 6)}...${address.slice(-4)}`}
+          )}
+          {isConnected && address && (
+            <div className="flex items-center gap-2 mt-2">
+              <div className="text-sm font-medium text-indigo-700">
+                {`${address.slice(0, 6)}...${address.slice(-4)}`}
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* ВЫПАДАЮЩИЙ БЛОК С ИНФО-СЕКЦИЯМИ */}
+      {infoSection === 'how' && (
+        <section className="py-16 bg-white border-b-2 border-indigo-100 animate-fade-in">
+          <div className="w-full px-2 sm:px-8 lg:px-24 xl:px-40 2xl:px-64 mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">How Sendly Works</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Four simple steps to create and send personalized NFT gift cards
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+              {[
+                ["✨", "Create Your Card", "Design a personalized NFT gift card with custom messages and artwork"],
+                ["💰", "Add Value", "Load your card with USDC or USDT - any amount you choose"],
+                ["🚀", "Send Instantly", "Send via wallet address, email, or shareable link anywhere in the world"],
+                ["🎁", "Easy Redemption", "Recipients redeem to their smart wallet or spend on integrated platforms"]
+              ].map(([icon, title, desc], i) => (
+                <div key={i} className="text-center bg-white rounded-2xl shadow-lg p-8 h-full flex flex-col items-center justify-start">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                    {i + 1}
+                  </div>
+                  <div className="text-4xl mb-4">{icon}</div>
+                  <h3 className="text-xl font-semibold mb-4">{title}</h3>
+                  <p className="text-gray-600">{desc}</p>
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </header>
+        </section>
+      )}
+      {infoSection === 'features' && (
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50 border-b-2 border-indigo-100 animate-fade-in">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Sendly?</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Discover the features that make Sendly the future of digital gifting
+              </p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="space-y-8">
+                {[
+                  ["🌉", "Web2-Web3 Bridge", "Seamlessly redeemable on traditional platforms and decentralized ecosystems"],
+                  ["⚡", "Soneium Network Powered", "Ultra-fast, secure transactions with entertainment-grade infrastructure"],
+                  ["🧠", "Smart Wallet Integration", "No complex wallet setups - just user-friendly redemption"]
+                ].map(([icon, title, desc], i) => (
+                  <div key={i} className="flex items-start space-x-4">
+                    <div className="text-3xl">{icon}</div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                      <p className="text-gray-600">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-white p-8 rounded-2xl shadow-xl">
+                <h3 className="text-2xl font-bold mb-6">Coming Soon: Platform Integrations</h3>
+                <div className="space-y-4">
+                  {[
+                    ["PlayStation Store", "In Development", "bg-blue-100 text-blue-800"],
+                    ["Sony Music", "Planned", "bg-purple-100 text-purple-800"],
+                    ["Sony Pictures", "Planned", "bg-red-100 text-red-800"],
+                    ["Amazon", "Planned", "bg-orange-100 text-orange-800"],
+                    ["Steam", "Exploring", "bg-gray-100 text-gray-800"]
+                  ].map(([name, status, color], i) => (
+                    <div key={i} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                      <span className="font-medium">{name}</span>
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${color}`}>{status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+      {infoSection === 'merchants' && (
+        <section className="py-16 bg-white border-b-2 border-indigo-100 animate-fade-in">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Partner With Sendly</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Join our growing ecosystem and tap into the future of digital commerce
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h3 className="text-2xl font-bold mb-6">Benefits for Merchants</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Access to crypto-native customers",
+                    "Reduced payment processing fees",
+                    "Instant settlement with stablecoins",
+                    "Global reach without currency conversion",
+                    "Web3 marketing opportunities",
+                    "Future-proof payment infrastructure"
+                  ].map((benefit, i) => (
+                    <li key={i} className="flex items-center space-x-3">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="text-gray-700">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button className="mt-8 bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                  Become a Partner
+                </button>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-8 rounded-2xl">
+                <h4 className="text-xl font-bold mb-4">Integration Process</h4>
+                <div className="space-y-4">
+                  {[
+                    [1, "API Integration", "Simple REST API for gift card redemption"],
+                    [2, "Testing Phase", "Sandbox environment for thorough testing"],
+                    [3, "Go Live", "Launch with full marketing support"]
+                  ].map(([step, title, desc], i) => (
+                    <div key={i} className="flex items-start space-x-4">
+                      <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center text-sm font-bold">{step}</div>
+                      <div>
+                        <h5 className="font-semibold">{title}</h5>
+                        <p className="text-gray-600 text-sm">{desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+      {infoSection === 'faq' && (
+        <section className="py-16 bg-gray-50 border-b-2 border-indigo-100 animate-fade-in">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <p className="text-xl text-gray-600">Everything you need to know about Sendly</p>
+            </div>
+            <div className="space-y-4">
+              {[
+                ["What is an NFT gift card?", "A unique digital token loaded with USDC or USDT, customizable and transferable."],
+                ["How do I redeem a gift card?", "Connect your wallet, select a card, and redeem it on-chain or to your balance."],
+                ["Is Sendly secure?", "Yes, it's built on the Soneium network for entertainment-grade security."],
+                ["Can I use traditional platforms?", "Yes! We're working on integrations with platforms like Amazon, Sony, and more."]
+              ].map(([q, a], i) => (
+                <div key={i} className="bg-white rounded-lg shadow-sm">
+                  <details className="group">
+                    <summary className="cursor-pointer p-6 text-lg font-semibold text-gray-900 group-open:rounded-b-none">
+                      {q}
+                    </summary>
+                    <div className="px-6 pb-6 text-gray-600">{a}</div>
+                  </details>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="max-w-xl mx-auto bg-white/90 rounded-3xl shadow-2xl p-8">
         <div className="flex justify-center mb-8">
@@ -581,59 +759,59 @@ function Page() {
             </div>
           )}
           {activeTab === 'spend' && (
-  <div>
-    <h2 className="text-xl font-bold mb-4 text-indigo-700">Spend a Card on Services</h2>
-    <div className="flex justify-center gap-6 mb-6">
-      {services.map(service => (
-        <button
-          key={service.name}
-          onClick={() => handleServiceClick(service.name)}
-          className={`rounded-2xl shadow-lg overflow-hidden border-4 transition-all duration-200
-            ${selectedService === service.name ? 'border-indigo-500 scale-105' : 'border-transparent hover:scale-105 hover:border-indigo-300'}`}
-          style={{ width: 120, height: 120, opacity: selectedService && selectedService !== service.name ? 0.5 : 1 }}
-        >
-          <img src={service.img} alt={service.name} className="object-cover w-full h-full" />
-        </button>
-      ))}
-    </div>
-    {selectedService && (
-      <div className="mb-4 text-center text-lg font-semibold text-indigo-700">
-        You selected: {selectedService}
-      </div>
-    )}
-    <input
-      type="number"
-      placeholder="Card ID"
-      value={tokenId}
-      onChange={(e) => setTokenId(e.target.value)}
-      className="w-full px-4 py-3 rounded-xl border border-indigo-200 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-3"
-    />
-    <div className="flex flex-col gap-3">
-      <button
-        onClick={() => redeemGiftCard('service')}
-        className={`w-full py-3 rounded-xl font-bold text-lg shadow transition
-          ${selectedService
-            ? 'bg-gradient-to-r from-indigo-500 to-indigo-400 text-white hover:from-indigo-600 hover:to-indigo-500'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}
-        disabled={!selectedService}
-      >
-        Spend in Service
-      </button>
-      <button
-        onClick={() => redeemGiftCard('wallet')}
-        className={`w-full py-3 rounded-xl font-bold text-lg shadow transition
-          ${!selectedService
-            ? 'bg-gradient-to-r from-green-500 to-green-400 text-white hover:from-green-600 hover:to-green-500'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-          }`}
-        disabled={!!selectedService}
-      >
-        Receive to Wallet
-      </button>
-    </div>
-  </div>
-)}
+            <div>
+              <h2 className="text-xl font-bold mb-4 text-indigo-700">Spend a Card on Services</h2>
+              <div className="flex justify-center gap-6 mb-6">
+                {services.map(service => (
+                  <button
+                    key={service.name}
+                    onClick={() => handleServiceClick(service.name)}
+                    className={`rounded-2xl shadow-lg overflow-hidden border-4 transition-all duration-200
+                      ${selectedService === service.name ? 'border-indigo-500 scale-105' : 'border-transparent hover:scale-105 hover:border-indigo-300'}`}
+                    style={{ width: 120, height: 120, opacity: selectedService && selectedService !== service.name ? 0.5 : 1 }}
+                  >
+                    <img src={service.img} alt={service.name} className="object-cover w-full h-full" />
+                  </button>
+                ))}
+              </div>
+              {selectedService && (
+                <div className="mb-4 text-center text-lg font-semibold text-indigo-700">
+                  You selected: {selectedService}
+                </div>
+              )}
+              <input
+                type="number"
+                placeholder="Card ID"
+                value={tokenId}
+                onChange={(e) => setTokenId(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border border-indigo-200 text-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-3"
+              />
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => redeemGiftCard('service')}
+                  className={`w-full py-3 rounded-xl font-bold text-lg shadow transition
+                    ${selectedService
+                      ? 'bg-gradient-to-r from-indigo-500 to-indigo-400 text-white hover:from-indigo-600 hover:to-indigo-500'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                  disabled={!selectedService}
+                >
+                  Spend in Service
+                </button>
+                <button
+                  onClick={() => redeemGiftCard('wallet')}
+                  className={`w-full py-3 rounded-xl font-bold text-lg shadow transition
+                    ${!selectedService
+                      ? 'bg-gradient-to-r from-green-500 to-green-400 text-white hover:from-green-600 hover:to-green-500'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                  disabled={!!selectedService}
+                >
+                  Receive to Wallet
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
